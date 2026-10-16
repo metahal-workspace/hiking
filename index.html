@@ -264,6 +264,7 @@
     .legend-dot.future { background: #d06d22; }
     .map-layout { display: grid; grid-template-columns: minmax(155px, .55fr) minmax(0, 1.8fr) minmax(155px, .55fr); gap: 22px; align-items: start; }
     .map-layout.is-past { grid-template-columns: minmax(210px, .65fr) minmax(0, 1.7fr); }
+    .map-layout.is-upcoming { grid-template-columns: minmax(210px, .65fr) minmax(0, 1.7fr); }
     .map-layout.is-future { grid-template-columns: minmax(0, 1.7fr) minmax(210px, .65fr); }
     #hikeMap, .google-map-frame { height: min(690px, 72vh); min-height: 500px; background: var(--paper-2); border: 1px solid var(--line); }
     #hikeMap { z-index: 1; }
@@ -290,6 +291,7 @@
     .map-place span { display: block; margin: 3px 0 8px; color: var(--muted); font-size: .78rem; }
     .map-place button, .map-popup-link { border: 0; padding: 0; background: transparent; color: var(--forest-2); font-size: .76rem; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left; }
     .map-place.future strong { color: var(--sun); }
+    .map-place.upcoming strong { color: #2f6fb2; }
     .map-status { color: var(--muted); font-size: .84rem; margin: 12px 0 0; }
     .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface); color: var(--ink); }
     .leaflet-popup-content { font-family: var(--sans); line-height: 1.45; }
@@ -345,12 +347,13 @@
     .walk-qr-block { flex: 0 0 216px; text-align: center; }
     .walk-qr-block .qr-frame { margin: 0 auto 10px; }
     .walk-mini-map { flex: 1 1 220px; max-width: 320px; }
-    .walk-meeting-photos { flex: 1 1 240px; min-width: 0; max-width: 280px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; margin: 0; }
+    .walk-meeting-group { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin: 0; }
+    .walk-meeting-photos { flex: 0 1 240px; min-width: 200px; max-width: 280px; display: flex; flex-direction: column; gap: 12px; }
+    .meeting-group-caption { flex: 0 0 100%; margin: 0; text-align: center; color: var(--ink); font-size: .8rem; font-weight: 700; }
     .walk-share-map.cowell-map { flex: 0 1 200px; max-width: 200px; }
     .meeting-photo { display: block; width: 100%; padding: 0; border: 1px solid var(--line); background: var(--paper-2); cursor: zoom-in; aspect-ratio: 4 / 3; overflow: hidden; }
     .meeting-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
     .meeting-photo:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
-    .meeting-photos-caption { grid-column: 1 / -1; margin: 0; text-align: center; color: var(--ink); font-size: .8rem; font-weight: 700; }
     dialog.photo-lightbox { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--modal); color: var(--ink); box-shadow: var(--shadow); }
     dialog.photo-lightbox[open] { display: flex; flex-direction: column; }
     dialog.photo-lightbox::backdrop { background: rgba(9, 17, 12, .82); }
@@ -372,7 +375,7 @@
       .date-filter { justify-content: space-between; }
       .date-filter select { flex: 1; max-width: 360px; }
       .hike-card { grid-template-columns: 1fr; gap: 23px; padding: 28px 0 38px; }
-      .candidates-intro, .map-intro, .map-layout, .map-layout.is-past, .map-layout.is-future, .dialog-body { grid-template-columns: 1fr; gap: 22px; }
+      .candidates-intro, .map-intro, .map-layout, .map-layout.is-past, .map-layout.is-upcoming, .map-layout.is-future, .dialog-body { grid-template-columns: 1fr; gap: 22px; }
       .candidate-card { grid-template-columns: 1fr; gap: 23px; }
       .map-filter-stack { justify-content: flex-start; }
       .map-center { order: -1; }
@@ -396,7 +399,8 @@
       .walk-share-row { flex-direction: column; align-items: center; }
       .walk-mini-map { width: 100%; max-width: 420px; }
       .walk-share-map { width: 100%; max-width: 420px; }
-      .walk-meeting-photos { width: 100%; max-width: 560px; }
+      .walk-meeting-group { flex-direction: column; align-items: center; width: 100%; }
+      .walk-meeting-photos { width: 100%; max-width: 420px; }
       .walk-share-map.cowell-map { width: 100%; max-width: 420px; flex-basis: auto; }
     }
     @media (max-width: 520px) {
@@ -530,7 +534,7 @@
     <section id="mapPage" class="page map-page" data-page="map" hidden aria-labelledby="mapTitle">
       <div class="map-intro">
         <h2 id="mapTitle" data-en="The walks, on the map" data-fr="Les randonnées sur la carte">The walks, on the map</h2>
-        <p data-en="Compare completed outings and possible future walks across the Bay Area. Both map views show every location together, with Past, Future and All filters." data-fr="Comparez les sorties passées et les futures randonnées possibles dans toute la baie. Les deux cartes affichent tous les lieux ensemble, avec les filtres Passées, Futures et Toutes.">Compare completed outings and possible future walks across the Bay Area. Both map views show every location together, with Past, Future and All filters.</p>
+        <p data-en="Compare completed outings and possible future walks across the Bay Area. Both map views show every location together, with Past, Upcoming, Future and All filters." data-fr="Comparez les sorties passées et les futures randonnées possibles dans toute la baie. Les deux cartes affichent tous les lieux ensemble, avec les filtres Passées, À venir, Futures et Toutes.">Compare completed outings and possible future walks across the Bay Area. Both map views show every location together, with Past, Upcoming, Future and All filters.</p>
       </div>
       <div class="map-tools">
         <div class="map-provider-tabs" role="tablist" aria-label="Map provider">
@@ -540,6 +544,7 @@
         <div class="map-filter-stack">
           <div class="map-filter" role="group" aria-label="Map hike selection">
             <button type="button" data-map-scope="past" aria-pressed="false" data-en="Past" data-fr="Passées">Past</button>
+            <button type="button" data-map-scope="upcoming" aria-pressed="false" data-en="Upcoming" data-fr="À venir">Upcoming</button>
             <button type="button" data-map-scope="future" aria-pressed="false" data-en="Future" data-fr="Futures">Future</button>
             <button type="button" data-map-scope="all" aria-pressed="true" data-en="All" data-fr="Toutes">All</button>
           </div>
@@ -557,6 +562,7 @@
       </div>
       <div id="mapLayout" class="map-layout is-all">
         <aside id="pastMapFallback" class="map-fallback" aria-label="Past hike locations"></aside>
+        <aside id="upcomingMapFallback" class="map-fallback" aria-label="Upcoming walk locations" hidden></aside>
         <div class="map-center">
           <div id="osmProviderPanel" class="provider-pane" role="tabpanel" aria-labelledby="osmProviderTab">
             <div id="hikeMap" role="region" aria-label="OpenStreetMap map of hike locations"></div>
@@ -564,7 +570,7 @@
           </div>
           <div id="googleProviderPanel" class="provider-pane" role="tabpanel" aria-labelledby="googleProviderTab" hidden>
             <div class="google-map-head">
-              <strong id="googleMapTitle">39 hikes · Past + Future</strong>
+              <strong id="googleMapTitle">39 hikes · All</strong>
               <a id="googleMapLink" href="https://www.google.com/maps/search/?api=1&query=San%20Francisco%20Bay%20Area%2C%20California" target="_blank" rel="noopener noreferrer" data-en="Open in Google Maps ↗" data-fr="Ouvrir dans Google Maps ↗">Open in Google Maps ↗</a>
             </div>
             <div id="googleMapFrame" class="google-map-frame" role="region" aria-label="Google Map of hike locations" aria-busy="false">
@@ -1123,31 +1129,30 @@
         detailSections: {
           en: [
             {label: "Date", text: "Sunday, December 6, 2026 or Sunday, January 10, 2027"},
-            {label: "Meeting time", text: "8:30–9:00 AM; ferry departs at 9:25 AM. Return: 2:35 PM (arrival in San Francisco at 3:05 PM)."},
             {label: "Getting there", text: "Angel Island is only accessible by ferry from San Francisco (or from Tiburon, but arrival times differ — contact us if interested)."},
-            {label: "Tickets", text: "Ferry tickets can be bought on site just before boarding, by credit card or with the Clipper system. Cost: $20 by contactless bank card. The fare includes the Angel Island State Park entrance fee. Since there is no ticket sales point on Angel Island, you generally buy the round trip before leaving San Francisco (https://www.goldengate.org/ferry/ferry-fares-payment/). Seniors (65+), youth (5–18): $8 each way ($16 round trip); children 4 and under: free. Senior discounts only with the Senior Clipper Card: free, for ages 65 and over — apply online on the Clipper website, by mail, or in person at select service points (proof of age required: passport, driver's license or ID card)."},
-            {label: "Meeting point", text: "see the map at the bottom of the page. Golden Gate Ferry terminal at the San Francisco Ferry Building, 1 Ferry Building, San Francisco, CA 94111, usually Gate B, behind the Ferry Building at the foot of Market Street. No private cars on the island."},
-            {heading: "Ferry schedule (from the Ferry Building, Gate B):"},
-            {image: "assets/inline-84eeef2e6ded3123.png", caption: "Ferry schedule", ariaLabel: "Enlarge the ferry schedule", alt: "Golden Gate Ferry schedule between San Francisco Ferry Terminal Gate B and Angel Island State Park"},
+            {label: "Meeting time", text: "8:30–9:00 AM; ferry departs at 9:25 AM. Return: 2:35 PM (arrival in San Francisco at 3:05 PM)."},
+            {label: "Tickets", text: "Ferry tickets can be bought on site just before boarding, by credit card or with the Clipper system. Cost: $20 by contactless bank card. The fare includes the Angel Island State Park entrance fee. Since there is no ticket sales point on Angel Island, we buy the round trip before leaving San Francisco (https://www.goldengate.org/ferry/ferry-fares-payment/). Seniors (65+), youth (5–18): $16 round trip; children 4 and under: free. Senior discounts only with the Senior Clipper Card (free, apply online on the Clipper website - proof of age required)."},
+            {label: "Meeting point", text: "see the map below. Golden Gate Ferry terminal at the San Francisco Ferry Building, 1 Ferry Building, San Francisco, CA 94111, usually Gate B, behind the Ferry Building at the foot of Market Street. No private cars on the island."},
             {label: "Parking", text: "Several public parking options near the ferry terminal, but the closer the more expensive. We can arrange carpooling: contact us. Allow $20 to $40 for parking (4–5 h). Parking options: https://www.ferrybuildingmarketplace.com/visit/"},
             {image: "assets/inline-fa4cb325c70be46b.png", caption: "Parking map", ariaLabel: "Enlarge the parking map", alt: "Map of parking options near the San Francisco Ferry Building and the ferry gates"},
-            {label: "Public transit", text: "The closest major public-transit stop is Embarcadero Station. From BART or Muni Metro, get off at Embarcadero Station — the Ferry Building is about a 5-minute walk. From elsewhere in San Francisco or the Bay Area: BART → Embarcadero Station → walk to Ferry Building Gate B."},
+            {label: "Public transit", text: "The closest major public-transit stop is Embarcadero Station. From BART or Muni Metro, get off at Embarcadero Station — the Ferry Building is about a 5-minute walk. From San Francisco or the Bay Area: BART → Embarcadero Station → walk to Ferry Building Gate B."},
             {label: "What to expect", text: "Panoramic views over San Francisco Bay, the city skyline and the Golden Gate from the island's gentle perimeter road."},
             {label: "What to bring", text: "Plenty of water; a picnic lunch; layered clothing; sun protection; sturdy walking shoes."},
             {label: "Picnic", text: "Tables next to the visitor center at Ayala Cove, and at Quarry Beach."},
             {label: "Immigration Station (optional)", text: "Two museums — the Detention Barracks Museum (history of immigrant detention and exclusion, 1910–1940) and the Angel Island Immigration Museum (opened January 2022, housed in the former hospital). No food or drink concessions at the Immigration Station: bring your own picnic or eat at the Angel Island Company (the island's only restaurant), near the dock."},
+            {share: true},
             {heading: "Park map"},
             {image: "assets/inline-a8dfcca3fa81b965.png", caption: "Park map", ariaLabel: "Enlarge the park map", alt: "Official map of Angel Island State Park, with the Perimeter Road, trails, Ayala Cove and the Immigration Station", download: "assets/inline-e1e8eec43dc0e746.pdf", downloadLabel: "Download the PDF"},
+            {heading: "Ferry schedule (from the Ferry Building, Gate B):"},
+            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Ferry schedule", ariaLabel: "Enlarge the ferry schedule", alt: "Golden Gate Ferry schedule between San Francisco Ferry Terminal Gate B and Angel Island State Park"},
             {label: "Reply to reserve your spot", text: "a $10 contribution for non-members, $5 for members, is requested."}
           ],
           fr: [
             {label: "Date", text: "Dimanche 6 décembre 2026 ou dimanche 10 janvier 2027"},
-            {label: "Heure de rendez-vous", text: "8h30–9h00 ; départ du ferry à 9h25. Retour : 14h35 (arrivée à San Francisco à 15h05)."},
             {label: "Accès", text: "L'accès à Angel Island se fait uniquement en ferry depuis San Francisco (ou depuis Tiburon, mais les horaires d'arrivée sont différents — contactez-nous si vous êtes intéressé)."},
-            {label: "Billets", text: "Les billets de ferry peuvent être achetés sur place juste avant l'embarquement, par carte bancaire ou avec le système Clipper. Coût : 20 $ par carte bancaire sans contact. Le tarif comprend l'entrée au parc d'État d'Angel Island. Comme il n'y a pas de point de vente sur Angel Island, on achète généralement l'aller-retour avant de quitter San Francisco (https://www.goldengate.org/ferry/ferry-fares-payment/). Seniors (65 ans et plus), jeunes (5-18 ans) : 8 $ l'aller (16 $ l'aller-retour) ; enfants de 4 ans et moins : gratuit. Réductions seniors uniquement avec la Senior Clipper Card : gratuite, réservée aux 65 ans et plus — à demander en ligne sur le site Clipper, par courrier, ou en personne dans certains points de service (preuve d'âge requise : passeport, permis de conduire ou carte d'identité)."},
-            {label: "Rendez-vous", text: "voir la carte en bas de page. Embarcadère du Golden Gate Ferry au Ferry Building de San Francisco, 1 Ferry Building, San Francisco, CA 94111, généralement la porte B (Gate B), derrière le Ferry Building au pied de Market Street. Pas de voitures privées sur l'île."},
-            {heading: "Horaires du ferry (depuis le Ferry Building, porte B) :"},
-            {image: "assets/inline-84eeef2e6ded3123.png", caption: "Horaires du ferry", ariaLabel: "Agrandir les horaires du ferry", alt: "Horaires du Golden Gate Ferry entre le terminal Gate B de San Francisco et Angel Island State Park"},
+            {label: "Heure de rendez-vous", text: "8h30–9h00 ; départ du ferry à 9h25. Retour : 14h35 (arrivée à San Francisco à 15h05)."},
+            {label: "Billets", text: "Les billets de ferry peuvent être achetés sur place juste avant l'embarquement, par carte bancaire ou avec le système Clipper. Coût : 20 $ par carte bancaire sans contact. Le tarif comprend l'entrée au parc d'État d'Angel Island. Comme il n'y a pas de point de vente sur Angel Island, nous achetons l'aller-retour avant de quitter San Francisco (https://www.goldengate.org/ferry/ferry-fares-payment/). Seniors (65 ans et plus), jeunes (5-18 ans) : 16 $ l'aller-retour ; enfants de 4 ans et moins : gratuit. Réductions seniors uniquement avec la Senior Clipper Card (gratuite, à demander en ligne sur le site Clipper - preuve d'âge requise)."},
+            {label: "Rendez-vous", text: "voir la carte ci-dessous. Embarcadère du Golden Gate Ferry au Ferry Building de San Francisco, 1 Ferry Building, San Francisco, CA 94111, généralement la porte B (Gate B), derrière le Ferry Building au pied de Market Street. Pas de voitures privées sur l'île."},
             {label: "Stationnement", text: "Plusieurs parkings publics près de l'embarcadère, mais plus c'est proche, plus c'est cher. Covoiturage possible : nous contacter. Compter 20 $ à 40 $ pour le stationnement (4-5 h). Options de stationnement : https://www.ferrybuildingmarketplace.com/visit/"},
             {image: "assets/inline-fa4cb325c70be46b.png", caption: "Carte des stationnements", ariaLabel: "Agrandir la carte des stationnements", alt: "Carte des parkings près du Ferry Building de San Francisco et des portes d'embarquement du ferry"},
             {label: "Transports en commun", text: "La station la plus proche est Embarcadero Station. En BART ou Muni Metro, descendre à Embarcadero Station — le Ferry Building est à environ 5 minutes à pied. Depuis San Francisco ou la Bay Area : BART → Embarcadero Station → à pied jusqu'à la porte B du Ferry Building."},
@@ -1155,8 +1160,11 @@
             {label: "À apporter", text: "Beaucoup d'eau ; un pique-nique ; des vêtements en couches ; une protection solaire ; de bonnes chaussures de marche."},
             {label: "Pique-nique", text: "Tables à côté du visitor center à Ayala Cove, et à Quarry Beach."},
             {label: "Immigration Station (en option)", text: "Deux musées — le Detention Barracks Museum (histoire de la détention et de l'exclusion des immigrants, 1910-1940) et l'Angel Island Immigration Museum (ouvert en janvier 2022, dans l'ancien hôpital). Pas de restauration à l'Immigration Station : prévoir son pique-nique ou manger à l'Angel Island Company (le seul restaurant de l'île), près du quai."},
+            {share: true},
             {heading: "Carte du parc"},
             {image: "assets/inline-a8dfcca3fa81b965.png", caption: "Carte du parc", ariaLabel: "Agrandir la carte du parc", alt: "Carte officielle du parc d'État d'Angel Island, avec la Perimeter Road, les sentiers, Ayala Cove et la station d'immigration", download: "assets/inline-e1e8eec43dc0e746.pdf", downloadLabel: "Télécharger le PDF"},
+            {heading: "Horaires du ferry (depuis le Ferry Building, porte B) :"},
+            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Horaires du ferry", ariaLabel: "Agrandir les horaires du ferry", alt: "Horaires du Golden Gate Ferry entre le terminal Gate B de San Francisco et Angel Island State Park"},
             {label: "Répondez pour réserver votre place", text: "une participation de 10 $ pour les non-membres, 5 $ pour les membres, est demandée."}
           ]
         },
@@ -1519,10 +1527,12 @@
       const parkingDetail = h.parking ? `<div class="detail"><strong>${t('Parking','Stationnement')}</strong><p>${escapeHtml(h.parking[currentLang])}</p></div>` : '';
       const trailLink = h.alltrails || h.official;
       const smsText = t(`Trail link for ${h.fullPark}: ${trailLink}`, `Lien du sentier pour ${h.fullPark} : ${trailLink}`);
+      const SHARE_PLACEHOLDER = 'walk-share-block';
       const descriptionHtml = h.detailSections ? '' : `<p class="walk-description">${escapeHtml(h.description[currentLang])}</p>`;
       const detailsHtml = h.detailSections
         ? `<div class="details">${h.detailSections[currentLang].map(item => {
-            if (item.image) return `<figure class="walk-detail-map"><button type="button" data-photo-lightbox data-lightbox-caption="${escapeHtml(item.caption)}" aria-label="${escapeHtml(item.ariaLabel)}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt)}" /></button><figcaption>${escapeHtml(item.caption)}</figcaption></figure>${item.download ? `<p class="park-map-download"><a href="${escapeHtml(item.download)}" download>${escapeHtml(item.downloadLabel)}</a></p>` : ''}`;
+            if (item.share) return SHARE_PLACEHOLDER;
+            if (item.image) return `<figure class="walk-detail-map"><button type="button" data-photo-lightbox data-lightbox-caption="${escapeHtml(item.lightboxCaption || item.caption || '')}" aria-label="${escapeHtml(item.ariaLabel)}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.alt)}" /></button>${item.caption ? `<figcaption>${escapeHtml(item.caption)}</figcaption>` : ''}</figure>${item.download ? `<p class="park-map-download"><a href="${escapeHtml(item.download)}" download>${escapeHtml(item.downloadLabel)}</a></p>` : ''}`;
             if (item.heading) return `<p class="walk-detail-heading">${escapeHtml(item.heading)}</p>`;
             if (item.note) return `<p class="walk-closing">${escapeHtml(item.note)}</p>`;
             return `<div class="detail"><strong>${escapeHtml(item.label)}</strong><p>${linkifyText(item.text)}</p></div>`;
@@ -1539,18 +1549,19 @@
           </div>`;
       const belowDetailsHtml = '';
       const meetingPointFigure = h.id === 'henry-cowell-redwoods' ? `
-              <figure class="walk-meeting-photos">
-                <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
-                  <img src="assets/inline-fd8dd26dffc55b9f.jpg" alt="${escapeHtml(t('The large cut giant-sequoia trunk where the group meets, beside the ranger station', 'Le grand tronc coupé du séquoia géant où le groupe se retrouve, à côté de la maison des rangers'))}" />
-                </button>
-                <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
-                  <img src="assets/inline-75521428403a808e.jpg" alt="${escapeHtml(t('The park welcome panel with the trail map, at the meeting point', 'Le panneau d’accueil du parc avec le plan des sentiers, au point de rendez-vous'))}" />
-                </button>
-                <figcaption class="meeting-photos-caption">${t('Meeting point','Point de rendez-vous')}</figcaption>
-              </figure>
-              <figure class="walk-share-map cowell-map">
-                <button type="button" data-photo-lightbox data-lightbox-caption="${escapeHtml(t('“You are here” map','Carte « You are here »'))}" aria-label="${escapeHtml(t('Enlarge the “You are here” map','Agrandir la carte « You are here »'))}"><img src="assets/inline-4e686322cbe5e19b.png" alt="${escapeHtml(t('Small map of the Henry Cowell main entrance area, with a “You are here” marker at the meeting point','Petite carte de l’entrée principale de Henry Cowell, avec un repère « You are here » au point de rendez-vous'))}" /></button>
-                <figcaption>${escapeHtml(t('“You are here” map','Carte « You are here »'))}</figcaption>
+              <figure class="walk-meeting-group">
+                <div class="walk-meeting-photos">
+                  <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
+                    <img src="assets/inline-fd8dd26dffc55b9f.jpg" alt="${escapeHtml(t('The large cut giant-sequoia trunk where the group meets, beside the ranger station', 'Le grand tronc coupé du séquoia géant où le groupe se retrouve, à côté de la maison des rangers'))}" />
+                  </button>
+                  <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
+                    <img src="assets/inline-75521428403a808e.jpg" alt="${escapeHtml(t('The park welcome panel with the trail map, at the meeting point', 'Le panneau d’accueil du parc avec le plan des sentiers, au point de rendez-vous'))}" />
+                  </button>
+                </div>
+                <div class="walk-share-map cowell-map">
+                  <button type="button" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the “You are here” map','Agrandir la carte « You are here »'))}"><img src="assets/inline-4e686322cbe5e19b.png" alt="${escapeHtml(t('Small map of the Henry Cowell main entrance area, with a “You are here” marker at the meeting point','Petite carte de l’entrée principale de Henry Cowell, avec un repère « You are here » au point de rendez-vous'))}" /></button>
+                </div>
+                <figcaption class="meeting-group-caption">${t('Meeting point','Point de rendez-vous')}</figcaption>
               </figure>` : h.shareMap ? `
               <figure class="walk-share-map">
                 <button type="button" data-photo-lightbox data-lightbox-caption="${escapeHtml(h.shareMap.caption[currentLang])}" aria-label="${escapeHtml(h.shareMap.ariaLabel[currentLang])}"><img src="${escapeHtml(h.shareMap.image)}" alt="${escapeHtml(h.shareMap.alt[currentLang])}" /></button>
@@ -1563,6 +1574,22 @@
                 </div>
                 <figcaption><span>${t('Meeting point','Point de rendez-vous')}</span><small>${escapeHtml(h.meetingPoint[currentLang])}</small><small><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></small></figcaption>
               </figure>`;
+      const shareBlockHtml = `
+          <div class="walk-share">
+            <h3>${t('Take it with you','Emportez le lien')}</h3>
+            <div class="dialog-actions">
+              <a class="popup-link primary" href="sms:?&body=${encodeURIComponent(smsText)}">${t('Text it to yourself','Envoyez-le par SMS')}</a>
+            </div>
+            <div class="walk-share-row">
+              <div class="walk-qr-block">
+                <div id="walkQr" class="qr-frame" aria-label="QR code for the trail link"></div>
+                <p class="qr-caption">${t('Scan to open the trail link','Scannez pour ouvrir le lien du sentier')}</p>
+              </div>
+              ${meetingPointFigure}
+            </div>
+          </div>`;
+      const hasInlineShare = !!(h.detailSections && h.detailSections.en.some(item => item.share));
+      const detailsWithShare = detailsHtml.split(SHARE_PLACEHOLDER).join(shareBlockHtml);
       document.getElementById('walkPage').innerHTML = `
         <div class="walk-head">
           <p class="walk-park">${escapeHtml(h.fullPark)}</p>
@@ -1582,7 +1609,7 @@
             <div class="stat"><span class="stat-label">${t('Duration','Durée')}</span><span class="stat-value">${escapeHtml(duration)}</span></div>
             <div class="stat"><span class="stat-label">${t('Elevation','Dénivelé')}</span><span class="stat-value">${escapeHtml(h.elevation)}</span></div>
           </div>
-          ${detailsHtml}
+          ${detailsWithShare}
           ${belowDetailsHtml}
           <div class="link-row">
             <a class="popup-link" href="${h.alltrails}" target="_blank" rel="noopener noreferrer">${icons.arrow} AllTrails</a>
@@ -1592,19 +1619,7 @@
             ${h.parkMap ? `<a class="popup-link" href="${h.parkMap}" target="_blank" rel="noopener noreferrer">${icons.arrow} ${t('Park map (PDF)','Carte du parc (PDF)')}</a>` : ''}
             <button class="popup-link" type="button" data-copy-link>${t('Copy link','Copier le lien')}</button>
           </div>
-          <div class="walk-share">
-            <h3>${t('Take it with you','Emportez le lien')}</h3>
-            <div class="dialog-actions">
-              <a class="popup-link primary" href="sms:?&body=${encodeURIComponent(smsText)}">${t('Text it to yourself','Envoyez-le par SMS')}</a>
-            </div>
-            <div class="walk-share-row">
-              <div class="walk-qr-block">
-                <div id="walkQr" class="qr-frame" aria-label="QR code for the trail link"></div>
-                <p class="qr-caption">${t('Scan to open the trail link','Scannez pour ouvrir le lien du sentier')}</p>
-              </div>
-              ${meetingPointFigure}
-            </div>
-          </div>
+          ${hasInlineShare ? '' : shareBlockHtml}
         </article>`;
       const qr = document.getElementById('walkQr');
       if (window.QRCode) {
@@ -1675,29 +1690,40 @@
       document.getElementById('resultCount').textContent = currentLang === 'en' ? `${visible} ${visible === 1 ? 'hike' : 'hikes'}` : `${visible} ${visible === 1 ? 'randonnée' : 'randonnées'}`;
     }
     function mapPlaceTemplate(hike, type) {
-      const meta = type === 'past' ? hike.date : `${t('Future','Future')} ${String(hike.n).padStart(2,'0')}`;
-      const attr = type === 'past' ? `data-map-past="${hike.n}"` : `data-map-future="${hike.n}"`;
+      const meta = type === 'past' ? hike.date : type === 'upcoming' ? hike.date[currentLang] : `${t('Future','Future')} ${String(hike.n).padStart(2,'0')}`;
+      const attr = type === 'past' ? `data-map-past="${hike.n}"` : type === 'upcoming' ? `data-map-upcoming="${hike.id}"` : `data-map-future="${hike.n}"`;
       const action = currentMapProvider === 'google'
         ? t('Show on Google Maps','Afficher sur Google Maps')
         : t('Open OpenStreetMap preview','Ouvrir l’aperçu OpenStreetMap');
       return `<div class="map-place ${type}"><strong>${escapeHtml(hike.fullPark)}</strong><span>${escapeHtml(meta)} · ${escapeHtml(hike.route)}</span><button type="button" ${attr}>${action}</button></div>`;
     }
+    function orderMapFutureList(items, preference) {
+      const ordered = orderCandidatesForFilter(items, preference);
+      const preferredRank = new Map(preferredCandidateOrder.map((number, index) => [number, index]));
+      const preferred = ordered.filter(hike => hike.preferred).sort((a, b) => preferredRank.get(a.n) - preferredRank.get(b.n));
+      const rest = ordered.filter(hike => !hike.preferred);
+      return preferred.concat(rest);
+    }
     function renderMapLists() {
       const pastList = document.getElementById('pastMapFallback');
+      const upcomingList = document.getElementById('upcomingMapFallback');
       const futureList = document.getElementById('futureMapFallback');
       const visiblePastHikes = hikes;
-      const visibleCandidates = orderCandidatesForFilter(
+      const visibleCandidates = orderMapFutureList(
         candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)),
         currentMapPreference
       );
       const pastLabel = t('Past hikes','Randonnées passées');
+      const upcomingLabel = t('Upcoming walks','Randonnées à venir');
       const futureLabel = currentMapPreference === 'preferred'
         ? t('Preferred future hikes','Randonnées futures préférées')
         : currentMapPreference === 'other' ? t('Other future hikes','Autres randonnées futures') : t('Future hikes','Randonnées futures');
       pastList.innerHTML = `<h3 class="map-list-title">${pastLabel}</h3>` + visiblePastHikes.map(h => mapPlaceTemplate(h, 'past')).join('');
+      upcomingList.innerHTML = `<h3 class="map-list-title">${upcomingLabel}</h3>` + upcoming.map(h => mapPlaceTemplate(h, 'upcoming')).join('');
       futureList.innerHTML = `<h3 class="map-list-title">${futureLabel}</h3>` + visibleCandidates.map(h => mapPlaceTemplate(h, 'future')).join('');
-      pastList.hidden = currentMapScope === 'future';
-      futureList.hidden = currentMapScope === 'past';
+      pastList.hidden = currentMapScope === 'future' || currentMapScope === 'upcoming';
+      upcomingList.hidden = currentMapScope !== 'upcoming';
+      futureList.hidden = currentMapScope === 'past' || currentMapScope === 'upcoming';
       const layout = document.getElementById('mapLayout');
       layout.className = `map-layout is-${currentMapScope}`;
       document.querySelectorAll('[data-map-scope]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mapScope === currentMapScope)));
@@ -1765,8 +1791,9 @@
     function updateGoogleMapHeading(visibleCount) {
       const scopeLabel = currentMapScope === 'past'
         ? t('Past','Passées')
-        : currentMapScope === 'future' ? t('Future','Futures') : t('Past + Future','Passées + Futures');
-      const preferenceLabel = currentMapScope !== 'past' && currentMapPreference !== 'all'
+        : currentMapScope === 'upcoming' ? t('Upcoming','À venir')
+        : currentMapScope === 'future' ? t('Future','Futures') : t('All','Toutes');
+      const preferenceLabel = (currentMapScope === 'all' || currentMapScope === 'future') && currentMapPreference !== 'all'
         ? ` · ${currentMapPreference === 'preferred' ? t('Preferred future','Futures préférées') : t('Other future','Autres futures')}`
         : '';
       document.getElementById('googleMapTitle').textContent = `${visibleCount} ${t(visibleCount === 1 ? 'hike' : 'hikes', visibleCount === 1 ? 'randonnée' : 'randonnées')} · ${scopeLabel}${preferenceLabel}`;
@@ -1813,7 +1840,7 @@
       if (googleInfoWindow) googleInfoWindow.close();
       const visibleMarkers = [];
       googleMarkers.forEach(marker => {
-        const scopeVisible = marker.hike.mapType === 'upcoming' || currentMapScope === 'all' || marker.hike.mapType === currentMapScope;
+        const scopeVisible = currentMapScope === 'all' || marker.hike.mapType === currentMapScope;
         const preferenceVisible = marker.hike.mapType !== 'future' || hikeMatchesPreference(marker.hike, currentMapPreference);
         const visible = scopeVisible && preferenceVisible;
         marker.setMap(visible ? googleMap : null);
@@ -1872,7 +1899,7 @@
         const visiblePastCount = hikes.length;
         const visibleFutureCount = candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)).length;
         const visibleCount = (currentMapScope === 'all' || currentMapScope === 'past' ? visiblePastCount : 0)
-          + upcoming.length
+          + (currentMapScope === 'all' || currentMapScope === 'upcoming' ? upcoming.length : 0)
           + (currentMapScope === 'all' || currentMapScope === 'future' ? visibleFutureCount : 0);
         updateGoogleMapHeading(visibleCount);
         ensureGoogleMap();
@@ -1901,9 +1928,9 @@
         }
         markerLayer.clearLayers();
         const visibleItems = [];
-        if (currentMapScope !== 'future') hikes.forEach(hike => visibleItems.push(hike));
-        upcoming.forEach(hike => visibleItems.push(hike));
-        if (currentMapScope !== 'past') candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)).forEach(hike => visibleItems.push(hike));
+        if (currentMapScope === 'all' || currentMapScope === 'past') hikes.forEach(hike => visibleItems.push(hike));
+        if (currentMapScope === 'all' || currentMapScope === 'upcoming') upcoming.forEach(hike => visibleItems.push(hike));
+        if (currentMapScope === 'all' || currentMapScope === 'future') candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)).forEach(hike => visibleItems.push(hike));
         visibleItems.forEach(hike => {
           if (!hike.coords) return;
           const isFuture = hike.mapType === 'future';
@@ -2135,6 +2162,14 @@
       const button = event.target.closest('[data-map-past]');
       if (!button) return;
       const hike = hikes.find(item => item.n === Number(button.dataset.mapPast));
+      if (!hike) return;
+      if (currentMapProvider === 'google') showGoogleHike(hike, true);
+      else openTrailDialog(hike, false);
+    });
+    document.getElementById('upcomingMapFallback').addEventListener('click', event => {
+      const button = event.target.closest('[data-map-upcoming]');
+      if (!button) return;
+      const hike = upcoming.find(item => item.id === button.dataset.mapUpcoming);
       if (!hike) return;
       if (currentMapProvider === 'google') showGoogleHike(hike, true);
       else openTrailDialog(hike, false);
