@@ -292,6 +292,10 @@
     .map-place button, .map-popup-link { border: 0; padding: 0; background: transparent; color: var(--forest-2); font-size: .76rem; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left; }
     .map-place.future strong { color: var(--sun); }
     .map-place.upcoming strong { color: #2f6fb2; }
+    .map-place.is-selected { background: var(--sun-soft); box-shadow: inset 3px 0 0 var(--sun), inset 0 0 0 1px var(--line); }
+    .map-layout.is-all #upcomingMapFallback { grid-column: 1; grid-row: 2; }
+    .map-layout.is-all .map-center { grid-column: 2; grid-row: 1 / span 2; }
+    .map-layout.is-all #futureMapFallback { grid-column: 3; grid-row: 1 / span 2; }
     .map-status { color: var(--muted); font-size: .84rem; margin: 12px 0 0; }
     .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface); color: var(--ink); }
     .leaflet-popup-content { font-family: var(--sans); line-height: 1.45; }
@@ -381,6 +385,7 @@
       .candidates-intro, .map-intro, .map-layout, .map-layout.is-past, .map-layout.is-upcoming, .map-layout.is-future, .dialog-body { grid-template-columns: 1fr; gap: 22px; }
       .candidate-card { grid-template-columns: 1fr; gap: 23px; }
       .map-filter-stack { justify-content: flex-start; }
+      .map-layout.is-all #upcomingMapFallback, .map-layout.is-all .map-center, .map-layout.is-all #futureMapFallback { grid-column: auto; grid-row: auto; }
       .map-center { order: -1; }
       #hikeMap, .google-map-frame { height: 58vh; min-height: 420px; }
       .google-map-head { align-items: flex-start; flex-direction: column; gap: 5px; }
@@ -552,11 +557,6 @@
             <button type="button" data-map-scope="upcoming" aria-pressed="false" data-en="Upcoming" data-fr="À venir">Upcoming</button>
             <button type="button" data-map-scope="future" aria-pressed="false" data-en="Future" data-fr="Futures">Future</button>
             <button type="button" data-map-scope="all" aria-pressed="true" data-en="All" data-fr="Toutes">All</button>
-          </div>
-          <div class="future-filter" role="group" aria-label="Hike preference on map">
-            <button type="button" data-future-filter="all" aria-pressed="false" data-en="All" data-fr="Tous">All</button>
-            <button type="button" data-future-filter="preferred" aria-pressed="true" data-en="Preferred" data-fr="Préférés">Preferred</button>
-            <button type="button" data-future-filter="other" aria-pressed="false" data-en="Other" data-fr="Autres">Other</button>
           </div>
         </div>
       </div>
@@ -1440,7 +1440,6 @@
     let currentView = 'hikes';
     let currentMapScope = 'all';
     let currentFutureFilter = 'all';
-    let currentMapPreference = 'preferred';
     let currentMapProvider = 'osm';
     let googleMap = null;
     let googleInfoWindow = null;
@@ -1900,25 +1899,30 @@
       const upcomingList = document.getElementById('upcomingMapFallback');
       const futureList = document.getElementById('futureMapFallback');
       const visiblePastHikes = hikes;
-      const visibleCandidates = orderMapFutureList(
-        candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)),
-        currentMapPreference
-      );
+      const visibleCandidates = orderMapFutureList(candidates, 'all');
       const pastLabel = t('Past hikes','Randonnées passées');
       const upcomingLabel = t('Upcoming walks','Randonnées à venir');
-      const futureLabel = currentMapPreference === 'preferred'
-        ? t('Preferred future hikes','Randonnées futures préférées')
-        : currentMapPreference === 'other' ? t('Other future hikes','Autres randonnées futures') : t('Future hikes','Randonnées futures');
+      const futureLabel = t('Future hikes','Randonnées futures');
       pastList.innerHTML = `<h3 class="map-list-title">${pastLabel}</h3>` + visiblePastHikes.map(h => mapPlaceTemplate(h, 'past')).join('');
       upcomingList.innerHTML = `<h3 class="map-list-title">${upcomingLabel}</h3>` + upcoming.map(h => mapPlaceTemplate(h, 'upcoming')).join('');
       futureList.innerHTML = `<h3 class="map-list-title">${futureLabel}</h3>` + visibleCandidates.map(h => mapPlaceTemplate(h, 'future')).join('');
       pastList.hidden = currentMapScope === 'future' || currentMapScope === 'upcoming';
-      upcomingList.hidden = currentMapScope !== 'upcoming';
+      upcomingList.hidden = currentMapScope !== 'upcoming' && currentMapScope !== 'all';
       futureList.hidden = currentMapScope === 'past' || currentMapScope === 'upcoming';
       const layout = document.getElementById('mapLayout');
       layout.className = `map-layout is-${currentMapScope}`;
       document.querySelectorAll('[data-map-scope]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mapScope === currentMapScope)));
-      document.querySelectorAll('#mapPage [data-future-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.futureFilter === currentMapPreference)));
+    }
+    function highlightMapPlace(hike) {
+      document.querySelectorAll('#mapPage .map-place.is-selected').forEach(el => el.classList.remove('is-selected'));
+      const attr = hike.mapType === 'past' ? 'data-map-past' : hike.mapType === 'upcoming' ? 'data-map-upcoming' : 'data-map-future';
+      const value = hike.mapType === 'upcoming' ? hike.id : hike.n;
+      const button = document.querySelector(`#mapPage [${attr}="${value}"]`);
+      if (!button) return;
+      const entry = button.closest('.map-place');
+      if (!entry || entry.closest('aside').hidden) return;
+      entry.classList.add('is-selected');
+      entry.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     function googleInfoContent(hike) {
       const typeLabel = hike.mapType === 'future'
@@ -1984,10 +1988,7 @@
         ? t('Past','Passées')
         : currentMapScope === 'upcoming' ? t('Upcoming','À venir')
         : currentMapScope === 'future' ? t('Future','Futures') : t('All','Toutes');
-      const preferenceLabel = (currentMapScope === 'all' || currentMapScope === 'future') && currentMapPreference !== 'all'
-        ? ` · ${currentMapPreference === 'preferred' ? t('Preferred future','Futures préférées') : t('Other future','Autres futures')}`
-        : '';
-      document.getElementById('googleMapTitle').textContent = `${visibleCount} ${t(visibleCount === 1 ? 'hike' : 'hikes', visibleCount === 1 ? 'randonnée' : 'randonnées')} · ${scopeLabel}${preferenceLabel}`;
+      document.getElementById('googleMapTitle').textContent = `${visibleCount} ${t(visibleCount === 1 ? 'hike' : 'hikes', visibleCount === 1 ? 'randonnée' : 'randonnées')} · ${scopeLabel}`;
       document.getElementById('googleMapLink').href = 'https://www.google.com/maps/search/?api=1&query=San%20Francisco%20Bay%20Area%2C%20California';
     }
     function initializeGoogleMap() {
@@ -2031,9 +2032,7 @@
       if (googleInfoWindow) googleInfoWindow.close();
       const visibleMarkers = [];
       googleMarkers.forEach(marker => {
-        const scopeVisible = currentMapScope === 'all' || marker.hike.mapType === currentMapScope;
-        const preferenceVisible = marker.hike.mapType !== 'future' || hikeMatchesPreference(marker.hike, currentMapPreference);
-        const visible = scopeVisible && preferenceVisible;
+        const visible = currentMapScope === 'all' || marker.hike.mapType === currentMapScope;
         marker.setMap(visible ? googleMap : null);
         if (visible) visibleMarkers.push(marker);
       });
@@ -2063,6 +2062,7 @@
       });
     }
     function showGoogleHike(hike, moveToMap) {
+      highlightMapPlace(hike);
       ensureGoogleMap().then(() => {
         if (!googleMap) return;
         const marker = googleMarkers.find(item => item.hike === hike);
@@ -2088,7 +2088,7 @@
       renderMapLists();
       if (currentMapProvider === 'google') {
         const visiblePastCount = hikes.length;
-        const visibleFutureCount = candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)).length;
+        const visibleFutureCount = candidates.length;
         const visibleCount = (currentMapScope === 'all' || currentMapScope === 'past' ? visiblePastCount : 0)
           + (currentMapScope === 'all' || currentMapScope === 'upcoming' ? upcoming.length : 0)
           + (currentMapScope === 'all' || currentMapScope === 'future' ? visibleFutureCount : 0);
@@ -2121,7 +2121,7 @@
         const visibleItems = [];
         if (currentMapScope === 'all' || currentMapScope === 'past') hikes.forEach(hike => visibleItems.push(hike));
         if (currentMapScope === 'all' || currentMapScope === 'upcoming') upcoming.forEach(hike => visibleItems.push(hike));
-        if (currentMapScope === 'all' || currentMapScope === 'future') candidates.filter(hike => hikeMatchesPreference(hike, currentMapPreference)).forEach(hike => visibleItems.push(hike));
+        if (currentMapScope === 'all' || currentMapScope === 'future') candidates.forEach(hike => visibleItems.push(hike));
         visibleItems.forEach(hike => {
           if (!hike.coords) return;
           const isFuture = hike.mapType === 'future';
@@ -2133,7 +2133,7 @@
             fillColor: isFuture ? '#d06d22' : isUpcoming ? '#2f6fb2' : '#174f38',
             fillOpacity: 1
           });
-          marker.on('click', () => openTrailDialog(hike, false));
+          marker.on('click', () => { highlightMapPlace(hike); openTrailDialog(hike, false); });
           marker.bindTooltip(`${escapeHtml(hike.fullPark)} · ${escapeHtml(hike.route)}`, { direction: 'top', offset: [0, -8] });
           marker.addTo(markerLayer);
         });
@@ -2340,13 +2340,8 @@
       renderMap();
     }));
     document.querySelectorAll('[data-future-filter]').forEach(btn => btn.addEventListener('click', () => {
-      if (btn.closest('#mapPage')) {
-        currentMapPreference = btn.dataset.futureFilter;
-        renderMap();
-      } else {
-        currentFutureFilter = btn.dataset.futureFilter;
-        renderCandidates();
-      }
+      currentFutureFilter = btn.dataset.futureFilter;
+      renderCandidates();
     }));
     document.querySelectorAll('[data-map-provider]').forEach(btn => btn.addEventListener('click', () => setMapProvider(btn.dataset.mapProvider)));
     document.getElementById('pastMapFallback').addEventListener('click', event => {
@@ -2354,6 +2349,7 @@
       if (!button) return;
       const hike = hikes.find(item => item.n === Number(button.dataset.mapPast));
       if (!hike) return;
+      highlightMapPlace(hike);
       if (currentMapProvider === 'google') showGoogleHike(hike, true);
       else openTrailDialog(hike, false);
     });
@@ -2362,6 +2358,7 @@
       if (!button) return;
       const hike = upcoming.find(item => item.id === button.dataset.mapUpcoming);
       if (!hike) return;
+      highlightMapPlace(hike);
       if (currentMapProvider === 'google') showGoogleHike(hike, true);
       else openTrailDialog(hike, false);
     });
@@ -2370,6 +2367,7 @@
       if (!button) return;
       const hike = candidates.find(item => item.n === Number(button.dataset.mapFuture));
       if (!hike) return;
+      highlightMapPlace(hike);
       if (currentMapProvider === 'google') showGoogleHike(hike, true);
       else openTrailDialog(hike, false);
     });
