@@ -347,10 +347,13 @@
     .walk-qr-block { flex: 0 0 216px; text-align: center; }
     .walk-qr-block .qr-frame { margin: 0 auto 10px; }
     .walk-mini-map { flex: 1 1 220px; max-width: 320px; }
-    .walk-meeting-group { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin: 0; }
-    .walk-meeting-photos { flex: 0 1 240px; min-width: 200px; max-width: 280px; display: flex; flex-direction: column; gap: 12px; }
+    .walk-meeting-group { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; margin: 0; }
+    .walk-meeting-group .meeting-photo { flex: 1 1 0; width: auto; min-width: 0; }
     .meeting-group-caption { flex: 0 0 100%; margin: 0; text-align: center; color: var(--ink); font-size: .8rem; font-weight: 700; }
-    .walk-share-map.cowell-map { flex: 0 1 200px; max-width: 200px; }
+    .walk-share-cowell { max-width: none; }
+    .walk-share-cowell .walk-share-row { flex-wrap: nowrap; align-items: center; }
+    .walk-share-cowell .walk-qr-block { flex: 1 1 0; max-width: 216px; }
+    .walk-share-cowell .walk-meeting-group { flex: 3 1 0; }
     .meeting-photo { display: block; width: 100%; padding: 0; border: 1px solid var(--line); background: var(--paper-2); cursor: zoom-in; aspect-ratio: 4 / 3; overflow: hidden; }
     .meeting-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
     .meeting-photo:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
@@ -399,9 +402,11 @@
       .walk-share-row { flex-direction: column; align-items: center; }
       .walk-mini-map { width: 100%; max-width: 420px; }
       .walk-share-map { width: 100%; max-width: 420px; }
-      .walk-meeting-group { flex-direction: column; align-items: center; width: 100%; }
-      .walk-meeting-photos { width: 100%; max-width: 420px; }
-      .walk-share-map.cowell-map { width: 100%; max-width: 420px; flex-basis: auto; }
+      .walk-meeting-group { width: 100%; }
+      .walk-share-cowell .walk-share-row { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 10px; }
+      .walk-share-cowell .walk-qr-block { max-width: none; }
+      .walk-share-cowell .walk-qr-block .qr-frame { width: 100%; min-height: 0; aspect-ratio: 1 / 1; }
+      .walk-share-cowell .qr-caption { font-size: .68rem; line-height: 1.3; }
     }
     @media (max-width: 520px) {
       .page { width: calc(100% - 24px); }
@@ -1140,12 +1145,12 @@
             {label: "What to bring", text: "Plenty of water; a picnic lunch; layered clothing; sun protection; sturdy walking shoes."},
             {label: "Picnic", text: "Tables next to the visitor center at Ayala Cove, and at Quarry Beach."},
             {label: "Immigration Station (optional)", text: "Two museums — the Detention Barracks Museum (history of immigrant detention and exclusion, 1910–1940) and the Angel Island Immigration Museum (opened January 2022, housed in the former hospital). No food or drink concessions at the Immigration Station: bring your own picnic or eat at the Angel Island Company (the island's only restaurant), near the dock."},
+            {label: "Reply to reserve your spot", text: "a $10 contribution for non-members, $5 for members, is requested."},
             {share: true},
             {heading: "Park map"},
             {image: "assets/inline-a8dfcca3fa81b965.png", caption: "Park map", ariaLabel: "Enlarge the park map", alt: "Official map of Angel Island State Park, with the Perimeter Road, trails, Ayala Cove and the Immigration Station", download: "assets/inline-e1e8eec43dc0e746.pdf", downloadLabel: "Download the PDF"},
             {heading: "Ferry schedule (from the Ferry Building, Gate B):"},
-            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Ferry schedule", ariaLabel: "Enlarge the ferry schedule", alt: "Golden Gate Ferry schedule between San Francisco Ferry Terminal Gate B and Angel Island State Park"},
-            {label: "Reply to reserve your spot", text: "a $10 contribution for non-members, $5 for members, is requested."}
+            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Ferry schedule", ariaLabel: "Enlarge the ferry schedule", alt: "Golden Gate Ferry schedule between San Francisco Ferry Terminal Gate B and Angel Island State Park"}
           ],
           fr: [
             {label: "Date", text: "Dimanche 6 décembre 2026 ou dimanche 10 janvier 2027"},
@@ -1160,12 +1165,12 @@
             {label: "À apporter", text: "Beaucoup d'eau ; un pique-nique ; des vêtements en couches ; une protection solaire ; de bonnes chaussures de marche."},
             {label: "Pique-nique", text: "Tables à côté du visitor center à Ayala Cove, et à Quarry Beach."},
             {label: "Immigration Station (en option)", text: "Deux musées — le Detention Barracks Museum (histoire de la détention et de l'exclusion des immigrants, 1910-1940) et l'Angel Island Immigration Museum (ouvert en janvier 2022, dans l'ancien hôpital). Pas de restauration à l'Immigration Station : prévoir son pique-nique ou manger à l'Angel Island Company (le seul restaurant de l'île), près du quai."},
+            {label: "Répondez pour réserver votre place", text: "une participation de 10 $ pour les non-membres, 5 $ pour les membres, est demandée."},
             {share: true},
             {heading: "Carte du parc"},
             {image: "assets/inline-a8dfcca3fa81b965.png", caption: "Carte du parc", ariaLabel: "Agrandir la carte du parc", alt: "Carte officielle du parc d'État d'Angel Island, avec la Perimeter Road, les sentiers, Ayala Cove et la station d'immigration", download: "assets/inline-e1e8eec43dc0e746.pdf", downloadLabel: "Télécharger le PDF"},
             {heading: "Horaires du ferry (depuis le Ferry Building, porte B) :"},
-            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Horaires du ferry", ariaLabel: "Agrandir les horaires du ferry", alt: "Horaires du Golden Gate Ferry entre le terminal Gate B de San Francisco et Angel Island State Park"},
-            {label: "Répondez pour réserver votre place", text: "une participation de 10 $ pour les non-membres, 5 $ pour les membres, est demandée."}
+            {image: "assets/inline-84eeef2e6ded3123.png", caption: "", lightboxCaption: "Horaires du ferry", ariaLabel: "Agrandir les horaires du ferry", alt: "Horaires du Golden Gate Ferry entre le terminal Gate B de San Francisco et Angel Island State Park"}
           ]
         },
         alltrails: "https://www.alltrails.com/en-gb/trail/us/california/angel-island-perimeter-loop",
@@ -1736,17 +1741,15 @@
       const belowDetailsHtml = '';
       const meetingPointFigure = h.id === 'henry-cowell-redwoods' ? `
               <figure class="walk-meeting-group">
-                <div class="walk-meeting-photos">
-                  <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
-                    <img src="assets/inline-fd8dd26dffc55b9f.jpg" alt="${escapeHtml(t('The large cut giant-sequoia trunk where the group meets, beside the ranger station', 'Le grand tronc coupé du séquoia géant où le groupe se retrouve, à côté de la maison des rangers'))}" />
-                  </button>
-                  <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
-                    <img src="assets/inline-75521428403a808e.jpg" alt="${escapeHtml(t('The park welcome panel with the trail map, at the meeting point', 'Le panneau d’accueil du parc avec le plan des sentiers, au point de rendez-vous'))}" />
-                  </button>
-                </div>
-                <div class="walk-share-map cowell-map">
-                  <button type="button" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the “You are here” map','Agrandir la carte « You are here »'))}"><img src="assets/inline-4e686322cbe5e19b.png" alt="${escapeHtml(t('Small map of the Henry Cowell main entrance area, with a “You are here” marker at the meeting point','Petite carte de l’entrée principale de Henry Cowell, avec un repère « You are here » au point de rendez-vous'))}" /></button>
-                </div>
+                <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
+                  <img src="assets/inline-fd8dd26dffc55b9f.jpg" alt="${escapeHtml(t('The large cut giant-sequoia trunk where the group meets, beside the ranger station', 'Le grand tronc coupé du séquoia géant où le groupe se retrouve, à côté de la maison des rangers'))}" />
+                </button>
+                <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the meeting point photo', 'Agrandir la photo du point de rendez-vous'))}">
+                  <img src="assets/inline-75521428403a808e.jpg" alt="${escapeHtml(t('The park welcome panel with the trail map, at the meeting point', 'Le panneau d’accueil du parc avec le plan des sentiers, au point de rendez-vous'))}" />
+                </button>
+                <button type="button" class="meeting-photo" data-photo-lightbox aria-label="${escapeHtml(t('Enlarge the “You are here” map','Agrandir la carte « You are here »'))}">
+                  <img src="assets/inline-4e686322cbe5e19b.png" alt="${escapeHtml(t('Small map of the Henry Cowell main entrance area, with a “You are here” marker at the meeting point','Petite carte de l’entrée principale de Henry Cowell, avec un repère « You are here » au point de rendez-vous'))}" />
+                </button>
                 <figcaption class="meeting-group-caption">${t('Meeting Point','Point de rendez-vous')}</figcaption>
               </figure>` : h.shareMap ? `
               <figure class="walk-share-map">
@@ -1761,7 +1764,7 @@
                 <figcaption><span>${t('Meeting point','Point de rendez-vous')}</span><small>${escapeHtml(h.meetingPoint[currentLang])}</small><small><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></small></figcaption>
               </figure>`;
       const shareBlockHtml = `
-          <div class="walk-share">
+          <div class="walk-share${h.id === 'henry-cowell-redwoods' ? ' walk-share-cowell' : ''}">
             <h3>${t('Take it with you','Emportez le lien')}</h3>
             <div class="dialog-actions">
               <a class="popup-link primary" href="sms:?&body=${encodeURIComponent(smsText)}">${t('Text it to yourself','Envoyez-le par SMS')}</a>
