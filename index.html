@@ -1083,7 +1083,7 @@
       {
         id: "circle-corral-bass-lake", park: "Joseph D Grant County Park", fullPark: "Joseph D Grant County Park, San Jose",
         date: {en: "Sun Dec 13, 2026", fr: "dim. 13 déc. 2026"}, level: "moderate",
-        route: "Circle Corral and Bass Lake Loop", distance: "4.4 mi / 7.1 km", duration: "1.5–2 h", elevation: "499 ft / 152 m",
+        route: "Circle Corral and Bass Lake Loop", distance: "4.4 mi / 7.1 km", duration: "2 h", elevation: "499 ft / 152 m",
         difficulty: {en: "Moderate", fr: "Modérée"},
         image: "assets/inline-b3e7ee79f2cacca4.jpg", alt: "A pond among scattered oaks on the Bass Lake Loop in Joseph D Grant County Park", credit: "Komoot", creditUrl: "https://www.komoot.com/smarttour/e1308369252/boucle-du-bass-lake-joseph-d-grant-county-park",
         editorial: {en: "Back to Grant Ranch a month later for the lake side of the park: a loop past Bass Lake through open oak country, rated 4.6 stars on AllTrails.", fr: "Retour au Grant Ranch un mois plus tard, côté lac : une boucle passant par Bass Lake dans un paysage ouvert de chênes, notée 4,6 étoiles sur AllTrails."},
@@ -1092,6 +1092,9 @@
         parking: {en: "Paid parking at the main entrance, 18405 Mt Hamilton Rd, San Jose — $6 day-use vehicle fee.", fr: "Stationnement payant à l’entrée principale, 18405 Mt Hamilton Rd, San Jose — 6 $ par véhicule à la journée."},
         picnic: {en: "Yes — picnic at the Stockman's Picnic Area.", fr: "Oui — pique-nique à l’aire Stockman's Picnic Area."},
         meetingPoint: {en: "Rose Garden, Joseph D Grant County Park, San Jose", fr: "Rose Garden, Joseph D Grant County Park, San José"},
+        meetingTime: {en: "9:45–10:00 AM — departure 10:00 AM sharp", fr: "9 h 45 – 10 h 00 — départ à 10 h 00 précises"},
+        bring: {en: "Plenty of water; a picnic lunch; layered clothing; sun protection; sturdy walking shoes.", fr: "Beaucoup d’eau ; un pique-nique ; des vêtements en couches ; protection solaire ; de bonnes chaussures de marche."},
+        contribution: {en: "$10 contribution for non-members, $5 for members.", fr: "Participation de 10 $ pour les non-membres, 5 $ pour les membres."},
         alltrails: "https://www.alltrails.com/en-gb/explore/trail/us/california/circle-corral-and-bass-lake-loop",
         maps: "https://www.google.com/maps/search/?api=1&query=Joseph%20D%20Grant%20County%20Park%2C%2018405%20Mt%20Hamilton%20Rd%2C%20San%20Jose%2C%20CA",
         official: "https://parks.sccgov.org/santa-clara-county-parks/joseph-d-grant-county-park", coords: [37.34147, -121.71967]
@@ -1254,7 +1257,7 @@
       }
     ];
     upcoming.forEach(hike => {
-      hike.meetingTime = meetingTime;
+      if (!hike.meetingTime) hike.meetingTime = meetingTime;
       if (!hike.bring) hike.bring = bringList;
       hike.mapType = 'upcoming';
     });
@@ -1802,6 +1805,7 @@
             ${accessDetail}
             ${parkingDetail}
             <div class="detail"><strong>${t('Picnic tables','Pique-nique')}</strong><p>${escapeHtml(h.picnic[currentLang])}</p></div>
+            ${h.contribution ? `<div class="detail"><strong>${t('Contribution','Participation')}</strong><p>${escapeHtml(h.contribution[currentLang])}</p></div>` : ''}
           </div>`;
       const belowDetailsHtml = '';
       const meetingPointFigure = h.id === 'henry-cowell-redwoods' ? `
@@ -1900,6 +1904,20 @@
       const locatorCoords = h.coords || coordsByPark[h.fullPark];
       if (walkHeaderMap) { walkHeaderMap.remove(); walkHeaderMap = null; }
       if (locatorEl && locatorCoords) {
+        const isCircleCorral = h.id === 'circle-corral-bass-lake';
+        let openGoogleMaps = null;
+        if (isCircleCorral) {
+          let googleMapsOpenedAt = 0;
+          openGoogleMaps = () => {
+            const now = Date.now();
+            if (now - googleMapsOpenedAt < 600) return;
+            googleMapsOpenedAt = now;
+            window.open(h.maps, '_blank', 'noopener,noreferrer');
+          };
+          locatorEl.style.cursor = 'pointer';
+          locatorEl.setAttribute('title', t('Open in Google Maps', 'Ouvrir dans Google Maps'));
+          locatorEl.addEventListener('click', openGoogleMaps);
+        }
         const showStaticLocator = () => {
           locatorEl.classList.add('mini-map-media');
           locatorEl.innerHTML = `<img src="${escapeHtml(osmTileUrl(locatorCoords))}" alt="${escapeHtml(t(`Locator map for ${h.fullPark}`, `Carte de repérage pour ${h.fullPark}`))}" onerror="this.closest('figure').hidden = true" /><span class="mini-map-pin" aria-hidden="true"></span>`;
@@ -1921,7 +1939,15 @@
             L.circleMarker(locatorCoords, {
               radius: 10, color: '#f4f1e8', weight: 3, fillColor: '#174f38', fillOpacity: 1
             }).addTo(walkHeaderMap);
-            walkHeaderMap.setView(locatorCoords, 13);
+            if (openGoogleMaps) walkHeaderMap.on('click', openGoogleMaps);
+            if (isCircleCorral) {
+              const locatorZoom = 11;
+              const widthPx = locatorEl.clientWidth || 900;
+              const degWidth = widthPx * 360 / (256 * Math.pow(2, locatorZoom));
+              walkHeaderMap.setView([locatorCoords[0], locatorCoords[1] - degWidth * 0.25], locatorZoom);
+            } else {
+              walkHeaderMap.setView(locatorCoords, 13);
+            }
             setTimeout(() => { if (walkHeaderMap) walkHeaderMap.invalidateSize(); }, 0);
           } catch (error) {
             if (walkHeaderMap) { walkHeaderMap.remove(); walkHeaderMap = null; }
