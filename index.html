@@ -366,6 +366,9 @@
     .walk-share-cowell .walk-share-row { flex-wrap: nowrap; align-items: center; }
     .walk-share-cowell .walk-qr-block { flex: 1 1 0; max-width: 216px; }
     .walk-share-cowell .walk-meeting-group { flex: 3 1 0; }
+    .walk-share-circle .walk-share-row { align-items: center; }
+    .walk-share-actions { display: grid; gap: 8px; flex: 1 1 240px; align-content: center; }
+    .walk-share-actions .popup-link { justify-content: center; }
     .meeting-photo { display: block; width: 100%; padding: 0; border: 1px solid var(--line); background: var(--paper-2); cursor: zoom-in; aspect-ratio: 4 / 3; overflow: hidden; }
     .meeting-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
     .meeting-photo:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
@@ -421,6 +424,11 @@
       .walk-share-cowell .walk-qr-block { max-width: none; }
       .walk-share-cowell .walk-qr-block .qr-frame { width: 100%; min-height: 0; aspect-ratio: 1 / 1; }
       .walk-share-cowell .qr-caption { font-size: .68rem; line-height: 1.3; }
+      .walk-share-circle .walk-share-row { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 12px; }
+      .walk-share-circle .walk-qr-block { flex: 1 1 0; max-width: 216px; }
+      .walk-share-circle .walk-qr-block .qr-frame { width: 100%; min-height: 0; aspect-ratio: 1 / 1; }
+      .walk-share-circle .qr-caption { font-size: .68rem; line-height: 1.3; }
+      .walk-share-actions { flex: 1 1 0; }
     }
     @media (max-width: 520px) {
       .page { width: calc(100% - 24px); }
@@ -1091,7 +1099,8 @@
         highlights: {en: "Bass Lake, open oak grassland and wide Halls Valley views.", fr: "Bass Lake, prairies ouvertes plantées de chênes et vastes vues sur Halls Valley."},
         parking: {en: "Paid parking at the main entrance, 18405 Mt Hamilton Rd, San Jose — $6 day-use vehicle fee.", fr: "Stationnement payant à l’entrée principale, 18405 Mt Hamilton Rd, San Jose — 6 $ par véhicule à la journée."},
         picnic: {en: "Yes — picnic at the Stockman's Picnic Area.", fr: "Oui — pique-nique à l’aire Stockman's Picnic Area."},
-        meetingPoint: {en: "Rose Garden, Joseph D Grant County Park, San Jose", fr: "Rose Garden, Joseph D Grant County Park, San José"},
+        meetingPoint: {en: "In front of the Rose Garden building, Joseph D Grant County Park, San Jose", fr: "Devant le bâtiment de la Rose Garden, Joseph D Grant County Park, San José"},
+        time: {en: "10:00 AM – 1:00 PM", fr: "10 h 00 – 13 h 00"},
         meetingTime: {en: "9:45–10:00 AM — departure 10:00 AM sharp", fr: "9 h 45 – 10 h 00 — départ à 10 h 00 précises"},
         bring: {en: "Plenty of water; a picnic lunch; layered clothing; sun protection; sturdy walking shoes.", fr: "Beaucoup d’eau ; un pique-nique ; des vêtements en couches ; protection solaire ; de bonnes chaussures de marche."},
         contribution: {en: "$10 contribution for non-members, $5 for members.", fr: "Participation de 10 $ pour les non-membres, 5 $ pour les membres."},
@@ -1798,6 +1807,7 @@
           }).join('')}</div>`
         : `<div class="details">
             <div class="detail"><strong>${t('Date','Date')}</strong><p>${escapeHtml(h.date[currentLang])}</p></div>
+            ${h.time ? `<div class="detail"><strong>${t('Time','Horaire')}</strong><p>${escapeHtml(h.time[currentLang])}</p></div>` : ''}
             <div class="detail"><strong>${t('Meeting time','Heure de rendez-vous')}</strong><p>${escapeHtml(h.meetingTime[currentLang])}</p></div>
             <div class="detail"><strong>${t('Meeting point','Point de rendez-vous')}</strong><p>${escapeHtml(h.meetingPoint[currentLang])}</p></div>
             <div class="detail"><strong>${t('Why this walk','Pourquoi cette randonnée')}</strong><p>${escapeHtml(h.highlights[currentLang])}</p></div>
@@ -1832,7 +1842,21 @@
                 </div>
                 <figcaption><span>${t('Meeting point','Point de rendez-vous')}</span><small>${escapeHtml(h.meetingPoint[currentLang])}</small><small><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a></small></figcaption>
               </figure>`;
-      const shareBlockHtml = `
+      const isCircleCorralShare = h.id === 'circle-corral-bass-lake';
+      const shareBlockHtml = isCircleCorralShare ? `
+          <div class="walk-share walk-share-circle">
+            <h3>${t('Take it with you','Emportez le lien')}</h3>
+            <div class="walk-share-row">
+              <div class="walk-qr-block">
+                <div id="walkQr" class="qr-frame" aria-label="QR code for the trail link"></div>
+                <p class="qr-caption">${t('Scan to open the trail link','Scannez pour ouvrir le lien du sentier')}</p>
+              </div>
+              <div class="walk-share-actions">
+                <a class="popup-link primary" href="sms:?&body=${encodeURIComponent(smsText)}">${t('Text it to yourself','Envoyez-le par SMS')}</a>
+                <button class="popup-link" type="button" data-copy-link>${t('Copy link','Copier le lien')}</button>
+              </div>
+            </div>
+          </div>` : `
           <div class="walk-share${h.id === 'henry-cowell-redwoods' ? ' walk-share-cowell' : ''}">
             <h3>${t('Take it with you','Emportez le lien')}</h3>
             <div class="dialog-actions">
