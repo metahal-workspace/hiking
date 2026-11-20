@@ -333,6 +333,10 @@
     .walk-when .walk-time { color: var(--forest-2); }
     .walk-head .level { display: inline-block; margin-top: 14px; }
     .walk-photo { min-height: 400px; margin-bottom: 26px; }
+    .walk-locator { margin: 0 0 26px; }
+    .walk-locator-map { width: 100%; height: 400px; background: var(--paper-2); }
+    .walk-locator-map.mini-map-media { height: auto; }
+    .walk-locator-caption { margin-top: 7px; text-align: center; color: var(--muted); font-size: .8rem; font-weight: 700; }
     .walk-description { margin: 0 0 24px; font-size: 1.03rem; line-height: 1.6; }
     .walk-share { margin-top: 36px; border-top: 1px solid var(--line); padding-top: 24px; max-width: 750px; }
     .walk-detail-map { margin: 4px 0 2px; }
@@ -408,6 +412,7 @@
       .detail { grid-template-columns: 98px minmax(0,1fr); }
       .closing { grid-template-columns: 1fr; gap: 20px; padding: 60px 0 76px; }
       .walk-photo { min-height: 0; }
+      .walk-locator-map { height: 300px; }
       .walk-share-row { flex-direction: column; align-items: center; }
       .walk-mini-map { width: 100%; max-width: 420px; }
       .walk-share-map { width: 100%; max-width: 420px; }
@@ -1076,21 +1081,20 @@
     const meetingTime = {en: "10 AM – 1 PM", fr: "10h – 13h"};
     const upcoming = [
       {
-        id: "alum-rock-penitencia-creek", park: "Alum Rock Park, San Jose", fullPark: "Alum Rock Park, San Jose",
+        id: "circle-corral-bass-lake", park: "Joseph D Grant County Park", fullPark: "Joseph D Grant County Park, San Jose",
         date: {en: "Sun Dec 13, 2026", fr: "dim. 13 déc. 2026"}, level: "moderate",
-        route: "North Rim and Penitencia Creek", distance: "3.6 mi / 5.8 km", duration: "1.5–2 h · avg. 1 h 29", elevation: "449 ft / 137 m",
+        route: "Circle Corral and Bass Lake Loop", distance: "4.4 mi / 7.1 km", duration: "1.5–2 h", elevation: "499 ft / 152 m",
         difficulty: {en: "Moderate", fr: "Modérée"},
-        image: "assets/inline-c51c561de1752a46.jpg", alt: "Dry hills, rock outcrop and trail bench along the North Rim in Alum Rock Park", credit: "Pedalogue", creditUrl: "https://pedalogue.com/2015/10/11/hike-3-alum-rock-park-north-rim-trail/",
-        editorial: {en: "Along Upper Penitencia Creek, then up the North Rim Trail for views over the canyon.", fr: "Le long du ruisseau Penitencia supérieur, puis montée par le sentier North Rim pour des vues sur le canyon."},
-        description: {en: "The walk follows Upper Penitencia Creek through a shaded canyon before climbing the North Rim Trail for sweeping views over the park. The Youth Science Institute Nature Center makes a nice stop along the creek to learn about local wildlife.", fr: "La balade longe le ruisseau Penitencia supérieur dans un canyon ombragé avant de monter par le sentier North Rim pour de belles vues sur le parc. Le centre nature du Youth Science Institute est une halte intéressante le long du ruisseau pour découvrir la faune locale."},
-        highlights: {en: "Upper Penitencia Creek and the North Rim climb, with views over the canyon.", fr: "Upper Penitencia Creek et la montée du North Rim, avec des vues sur le canyon."},
-        parking: {en: "Paid — a fee applies to park at Alum Rock Park.", fr: "Payant — des frais s’appliquent pour stationner à Alum Rock Park."},
-        picnic: {en: "Yes — picnic facilities and restrooms are available along Penitencia Creek.", fr: "Oui — des installations de pique-nique et des toilettes se trouvent le long de Penitencia Creek."},
-        meetingPoint: {en: "Visitor Center, Alum Rock Park, San Jose", fr: "Visitor Center, Alum Rock Park, San José"},
-        popularity: {at_s: 4.6, at_r: 2092, y_s: 4.4, y_r: 372},
-        alltrails: "https://www.alltrails.com/trail/us/california/penitencia-creek-trail-and-north-rim-trail-loop",
-        maps: "https://www.google.com/maps/search/?api=1&query=Alum%20Rock%20Park%2C%20Penitencia%20Creek%20Rd%2C%20San%20Jose%2C%20CA",
-        official: "https://www.sanjoseca.gov/Home/Components/FacilityDirectory/FacilityDirectory/2088/2028", coords: [37.39566, -121.82512]
+        image: "assets/inline-b3e7ee79f2cacca4.jpg", alt: "A pond among scattered oaks on the Bass Lake Loop in Joseph D Grant County Park", credit: "Komoot", creditUrl: "https://www.komoot.com/smarttour/e1308369252/boucle-du-bass-lake-joseph-d-grant-county-park",
+        editorial: {en: "Back to Grant Ranch a month later for the lake side of the park: a loop past Bass Lake through open oak country, rated 4.6 stars on AllTrails.", fr: "Retour au Grant Ranch un mois plus tard, côté lac : une boucle passant par Bass Lake dans un paysage ouvert de chênes, notée 4,6 étoiles sur AllTrails."},
+        description: {en: "This loop combines the Circle Corral Trail with the shore of Bass Lake, crossing the open grassland and oak woodland of Joseph D Grant County Park, in the hills east of San Jose below Mount Hamilton.", fr: "Cette boucle associe le sentier Circle Corral aux rives de Bass Lake, à travers prairies ouvertes et chênaies du parc Joseph D Grant, dans les collines à l’est de San Jose, au pied du mont Hamilton."},
+        highlights: {en: "Bass Lake, open oak grassland and wide Halls Valley views.", fr: "Bass Lake, prairies ouvertes plantées de chênes et vastes vues sur Halls Valley."},
+        parking: {en: "Paid parking at the main entrance, 18405 Mt Hamilton Rd, San Jose — $6 day-use vehicle fee.", fr: "Stationnement payant à l’entrée principale, 18405 Mt Hamilton Rd, San Jose — 6 $ par véhicule à la journée."},
+        picnic: {en: "Yes — picnic at the Stockman's Picnic Area.", fr: "Oui — pique-nique à l’aire Stockman's Picnic Area."},
+        meetingPoint: {en: "Rose Garden, Joseph D Grant County Park, San Jose", fr: "Rose Garden, Joseph D Grant County Park, San José"},
+        alltrails: "https://www.alltrails.com/en-gb/explore/trail/us/california/circle-corral-and-bass-lake-loop",
+        maps: "https://www.google.com/maps/search/?api=1&query=Joseph%20D%20Grant%20County%20Park%2C%2018405%20Mt%20Hamilton%20Rd%2C%20San%20Jose%2C%20CA",
+        official: "https://parks.sccgov.org/santa-clara-county-parks/joseph-d-grant-county-park", coords: [37.34147, -121.71967]
       },
       {
         id: "los-cerritos-calero", park: "Calero County Park", fullPark: "Calero County Park, San Jose",
@@ -1161,20 +1165,21 @@
         official: "https://parks.santaclaracounty.gov/locations/villa-montalvo", coords: [37.24601, -122.03046]
       },
       {
-        id: "circle-corral-bass-lake", park: "Joseph D Grant County Park", fullPark: "Joseph D Grant County Park, San Jose",
+        id: "alum-rock-penitencia-creek", park: "Alum Rock Park, San Jose", fullPark: "Alum Rock Park, San Jose",
         date: {en: "Sun May 9, 2027", fr: "dim. 9 mai 2027"}, level: "moderate",
-        route: "Circle Corral and Bass Lake Loop", distance: "4.4 mi / 7.1 km", duration: "1.5–2 h", elevation: "499 ft / 152 m",
+        route: "North Rim and Penitencia Creek", distance: "3.6 mi / 5.8 km", duration: "1.5–2 h · avg. 1 h 29", elevation: "449 ft / 137 m",
         difficulty: {en: "Moderate", fr: "Modérée"},
-        image: "assets/inline-b3e7ee79f2cacca4.jpg", alt: "A pond among scattered oaks on the Bass Lake Loop in Joseph D Grant County Park", credit: "Komoot", creditUrl: "https://www.komoot.com/smarttour/e1308369252/boucle-du-bass-lake-joseph-d-grant-county-park",
-        editorial: {en: "Back to Grant Ranch a month later for the lake side of the park: a loop past Bass Lake through open oak country, rated 4.6 stars on AllTrails.", fr: "Retour au Grant Ranch un mois plus tard, côté lac : une boucle passant par Bass Lake dans un paysage ouvert de chênes, notée 4,6 étoiles sur AllTrails."},
-        description: {en: "This loop combines the Circle Corral Trail with the shore of Bass Lake, crossing the open grassland and oak woodland of Joseph D Grant County Park, in the hills east of San Jose below Mount Hamilton.", fr: "Cette boucle associe le sentier Circle Corral aux rives de Bass Lake, à travers prairies ouvertes et chênaies du parc Joseph D Grant, dans les collines à l’est de San Jose, au pied du mont Hamilton."},
-        highlights: {en: "Bass Lake, open oak grassland and wide Halls Valley views.", fr: "Bass Lake, prairies ouvertes plantées de chênes et vastes vues sur Halls Valley."},
-        parking: {en: "Paid parking at the main entrance, 18405 Mt Hamilton Rd, San Jose — $6 day-use vehicle fee.", fr: "Stationnement payant à l’entrée principale, 18405 Mt Hamilton Rd, San Jose — 6 $ par véhicule à la journée."},
-        picnic: {en: "Yes — picnic areas near the main entrance and Grant Lake, including reservable group sites.", fr: "Oui — aires de pique-nique près de l’entrée principale et de Grant Lake, dont des sites de groupe réservables."},
-        meetingPoint: {en: "To be confirmed — main entrance, 18405 Mt Hamilton Rd, San Jose", fr: "À confirmer — entrée principale, 18405 Mt Hamilton Rd, San Jose"},
-        alltrails: "https://www.alltrails.com/en-gb/explore/trail/us/california/circle-corral-and-bass-lake-loop",
-        maps: "https://www.google.com/maps/search/?api=1&query=Joseph%20D%20Grant%20County%20Park%2C%2018405%20Mt%20Hamilton%20Rd%2C%20San%20Jose%2C%20CA",
-        official: "https://parks.sccgov.org/santa-clara-county-parks/joseph-d-grant-county-park", coords: [37.34147, -121.71967]
+        image: "assets/inline-c51c561de1752a46.jpg", alt: "Dry hills, rock outcrop and trail bench along the North Rim in Alum Rock Park", credit: "Pedalogue", creditUrl: "https://pedalogue.com/2015/10/11/hike-3-alum-rock-park-north-rim-trail/",
+        editorial: {en: "Along Upper Penitencia Creek, then up the North Rim Trail for views over the canyon.", fr: "Le long du ruisseau Penitencia supérieur, puis montée par le sentier North Rim pour des vues sur le canyon."},
+        description: {en: "The walk follows Upper Penitencia Creek through a shaded canyon before climbing the North Rim Trail for sweeping views over the park. The Youth Science Institute Nature Center makes a nice stop along the creek to learn about local wildlife.", fr: "La balade longe le ruisseau Penitencia supérieur dans un canyon ombragé avant de monter par le sentier North Rim pour de belles vues sur le parc. Le centre nature du Youth Science Institute est une halte intéressante le long du ruisseau pour découvrir la faune locale."},
+        highlights: {en: "Upper Penitencia Creek and the North Rim climb, with views over the canyon.", fr: "Upper Penitencia Creek et la montée du North Rim, avec des vues sur le canyon."},
+        parking: {en: "Paid — a fee applies to park at Alum Rock Park.", fr: "Payant — des frais s’appliquent pour stationner à Alum Rock Park."},
+        picnic: {en: "Yes — picnic facilities and restrooms are available along Penitencia Creek.", fr: "Oui — des installations de pique-nique et des toilettes se trouvent le long de Penitencia Creek."},
+        meetingPoint: {en: "Visitor Center, Alum Rock Park, San Jose", fr: "Visitor Center, Alum Rock Park, San José"},
+        popularity: {at_s: 4.6, at_r: 2092, y_s: 4.4, y_r: 372},
+        alltrails: "https://www.alltrails.com/trail/us/california/penitencia-creek-trail-and-north-rim-trail-loop",
+        maps: "https://www.google.com/maps/search/?api=1&query=Alum%20Rock%20Park%2C%20Penitencia%20Creek%20Rd%2C%20San%20Jose%2C%20CA",
+        official: "https://www.sanjoseca.gov/Home/Components/FacilityDirectory/FacilityDirectory/2088/2028", coords: [37.39566, -121.82512]
       },
       {
         id: "angel-island-perimeter-road", park: "Angel Island State Park", fullPark: "Angel Island State Park",
@@ -1509,6 +1514,7 @@
     let markerLayer = null;
     let trailPreviewMap = null;
     let trailPreviewMarker = null;
+    let walkHeaderMap = null;
     let activeHike = null;
     let walkMode = false;
     let activeWalk = null;
@@ -1652,11 +1658,10 @@
               <div class="detail"><strong>${t('Picnic tables','Pique-nique')}</strong><p>${escapeHtml(h.picnic[currentLang])}</p></div>
             </div>
             <div class="link-row">
-              <button class="popup-link primary" type="button" data-open-map="${h.n}">${icons.map} ${t('Open map','Ouvrir la carte')}</button>
+              ${pastWalkByN[h.n] ? `<a class="popup-link primary" href="#/past/${pastWalkByN[h.n].id}">${icons.map} ${t('Detail','Détail')}</a>` : `<button class="popup-link primary" type="button" data-open-map="${h.n}">${icons.map} ${t('Detail','Détail')}</button>`}
               <a class="popup-link" href="${h.alltrails}" target="_blank" rel="noopener noreferrer">${icons.arrow} AllTrails</a>
               <a class="popup-link" href="${h.maps}" target="_blank" rel="noopener noreferrer">${icons.pin} Google Maps</a>
               <a class="popup-link" href="${h.official}" target="_blank" rel="noopener noreferrer">${icons.arrow} ${t('Official','Officiel')}</a>
-              ${pastWalkByN[h.n] ? `<a class="popup-link" href="#/past/${pastWalkByN[h.n].id}">${t('Details','Détails')}</a>` : ''}
             </div>
           </div>
         </article>`;
@@ -1701,7 +1706,7 @@
               <div class="detail"><strong>${t('Picnic tables','Pique-nique')}</strong><p>${escapeHtml(h.picnic[currentLang])}</p></div>
             </div>
             <div class="link-row">
-              <button class="popup-link primary" type="button" data-open-candidate="${h.n}">${icons.map} ${t('Open map','Ouvrir la carte')}</button>
+              <button class="popup-link primary" type="button" data-open-candidate="${h.n}">${icons.map} ${t('Detail','Détail')}</button>
               ${allTrailsLink}
               <a class="popup-link" href="${h.maps}" target="_blank" rel="noopener noreferrer">${icons.pin} Google Maps</a>
               <a class="popup-link" href="${h.official}" target="_blank" rel="noopener noreferrer">${icons.arrow} ${t('Official','Officiel')}</a>
@@ -1756,11 +1761,10 @@
               <div class="detail"><strong>${t('Picnic tables','Pique-nique')}</strong><p>${escapeHtml(h.picnic[currentLang])}</p></div>
             </div>
             <div class="link-row">
-              <button class="popup-link primary" type="button" data-open-upcoming="${h.id}">${icons.map} ${t('Open map','Ouvrir la carte')}</button>
+              <a class="popup-link primary" href="#/upcoming/${h.id}">${icons.map} ${t('Detail','Détail')}</a>
               <a class="popup-link" href="${h.alltrails}" target="_blank" rel="noopener noreferrer">${icons.arrow} AllTrails</a>
               <a class="popup-link" href="${h.maps}" target="_blank" rel="noopener noreferrer">${icons.pin} Google Maps</a>
               <a class="popup-link" href="${h.official}" target="_blank" rel="noopener noreferrer">${icons.arrow} ${t('Official','Officiel')}</a>
-              <a class="popup-link" href="#/upcoming/${h.id}">${t('Details','Détails')}</a>
             </div>
           </div>
         </article>`;
@@ -1849,9 +1853,9 @@
           <span class="level">${escapeHtml(h.difficulty[currentLang])}</span>
         </div>
         <article>
-          <figure class="card-photo walk-photo">
-            <img src="${h.image}" alt="${escapeHtml(h.alt)}" />
-            <a class="photo-credit" href="${h.creditUrl}" target="_blank" rel="noopener noreferrer">${escapeHtml(h.credit)} ↗</a>
+          <figure class="walk-locator">
+            <div id="walkLocatorMap" class="walk-locator-map" role="img" aria-label="${escapeHtml(t(`Locator map for ${h.fullPark}`, `Carte de repérage pour ${h.fullPark}`))}"></div>
+            <figcaption class="walk-locator-caption">${t('Locator map','Carte de repérage')}</figcaption>
           </figure>
           ${h.tagline ? `<p class="walk-tagline">${escapeHtml(h.tagline[currentLang])}</p>` : ''}
           ${descriptionHtml}
@@ -1891,6 +1895,43 @@
         fallback.rel = 'noopener noreferrer';
         fallback.textContent = t('QR code unavailable — open the trail link','Code QR indisponible — ouvrir le lien du sentier');
         qr.appendChild(fallback);
+      }
+      const locatorEl = document.getElementById('walkLocatorMap');
+      const locatorCoords = h.coords || coordsByPark[h.fullPark];
+      if (walkHeaderMap) { walkHeaderMap.remove(); walkHeaderMap = null; }
+      if (locatorEl && locatorCoords) {
+        const showStaticLocator = () => {
+          locatorEl.classList.add('mini-map-media');
+          locatorEl.innerHTML = `<img src="${escapeHtml(osmTileUrl(locatorCoords))}" alt="${escapeHtml(t(`Locator map for ${h.fullPark}`, `Carte de repérage pour ${h.fullPark}`))}" onerror="this.closest('figure').hidden = true" /><span class="mini-map-pin" aria-hidden="true"></span>`;
+        };
+        if (window.L) {
+          try {
+            walkHeaderMap = L.map('walkLocatorMap', {
+              dragging: false,
+              touchZoom: false,
+              doubleClickZoom: false,
+              scrollWheelZoom: false,
+              zoomControl: false,
+              bounceAtZoomLimits: false
+            });
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(walkHeaderMap);
+            L.circleMarker(locatorCoords, {
+              radius: 10, color: '#f4f1e8', weight: 3, fillColor: '#174f38', fillOpacity: 1
+            }).addTo(walkHeaderMap);
+            walkHeaderMap.setView(locatorCoords, 13);
+            setTimeout(() => { if (walkHeaderMap) walkHeaderMap.invalidateSize(); }, 0);
+          } catch (error) {
+            if (walkHeaderMap) { walkHeaderMap.remove(); walkHeaderMap = null; }
+            showStaticLocator();
+          }
+        } else {
+          showStaticLocator();
+        }
+      } else if (locatorEl) {
+        locatorEl.closest('figure').hidden = true;
       }
     }
     function showWalkPage(hike) {
